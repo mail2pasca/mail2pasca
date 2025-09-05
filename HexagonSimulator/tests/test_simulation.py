@@ -36,7 +36,7 @@ class TestSystemLevelSimulation(unittest.TestCase):
             results = json.load(f)
 
         sim_params = self.config.get_simulation_parameters()
-        self.assertEqual(len(results), sim_params['num_ues'], "Number of results does not match number of UEs.")
+        self.assertEqual(len(results['ue_final_state']), sim_params['num_ues'], "Number of results does not match number of UEs.")
 
     def tearDown(self):
         """

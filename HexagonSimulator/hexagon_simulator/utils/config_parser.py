@@ -15,8 +15,19 @@ class ConfigParser:
             'scenario': self.config.get('simulation', 'scenario'),
             'frequency_ghz': self.config.getfloat('simulation', 'frequency_ghz'),
             'bandwidth_mhz': self.config.getfloat('simulation', 'bandwidth_mhz'),
-            'simulation_time_s': self.config.getint('simulation', 'simulation_time_s'),
+            'simulation_duration_ms': self.config.getint('simulation', 'simulation_duration_ms'),
+            'time_step_ms': self.config.getint('simulation', 'time_step_ms'),
             'num_ues': self.config.getint('simulation', 'num_ues'),
+        }
+
+    def get_traffic_parameters(self):
+        """Returns a dictionary of traffic parameters."""
+        return {
+            'model': self.config.get('traffic', 'model'),
+            'ftp_file_size_bytes': self.config.getint('traffic', 'ftp_file_size_bytes'),
+            'ftp_mean_inter_arrival_ms': self.config.getint('traffic', 'ftp_mean_inter_arrival_ms'),
+            'xr_fps': self.config.getint('traffic', 'xr_fps'),
+            'xr_packet_size_mean_bytes': self.config.getint('traffic', 'xr_packet_size_mean_bytes'),
         }
 
     def get_network_parameters(self):
