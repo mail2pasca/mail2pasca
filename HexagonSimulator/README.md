@@ -5,12 +5,19 @@ This project is a Python-based system-level simulator for 5G networks. It is des
 ## Features
 
 -   **Time-Stepped Simulation:** The simulation runs over a configurable duration with discrete time steps, allowing for dynamic traffic modeling.
--   **Channel Model:** Implements channel models based on 3GPP TR 38.901 for UMa, UMi, and RMa scenarios, including probabilistic Line-of-Sight (LOS) / Non-Line-of-Sight (NLOS) conditions.
--   **Traffic Models:** Includes multiple application traffic models:
+-   **Advanced Channel Modeling:**
+    -   Implements channel models based on 3GPP TR 38.901 for UMa, UMi, and RMa scenarios.
+    -   Includes probabilistic Line-of-Sight (LOS) / Non-Line-of-Sight (NLOS) conditions.
+    -   **MIMO Support:** Simulates a simplified uncorrelated Rayleigh fading MIMO channel.
+-   **Application Traffic Models:** Includes multiple configurable traffic models:
     -   **Full Buffer:** A continuous stream of data.
     -   **FTP Model 3:** Simulates bursty file transfers based on 3GPP specifications.
     -   **XR Model:** Simulates periodic traffic with jitter for Extended Reality applications.
--   **Queuing and Scheduling:** Implements packet queues at the base stations and a basic Round Robin scheduler to allocate resources.
+-   **Queuing and Scheduling:**
+    -   Implements packet queues at the base stations.
+    -   Provides multiple scheduling algorithms:
+        -   **Round Robin:** Serves users in a circular order.
+        -   **Proportional Fair:** Balances fairness and system throughput.
 -   **Key Performance Indicators (KPIs):** Calculates and reports:
     -   Application-level throughput.
     -   Average packet delay.
@@ -41,9 +48,13 @@ The configuration file is divided into the following sections:
 
 -   `[simulation]`: General parameters like scenario, simulation duration, and number of users.
 -   `[traffic]`: Select and configure the traffic model (FullBuffer, FTPModel3, or XRModel).
+-   `[scheduler]`: Select the scheduling algorithm (RoundRobin or ProportionalFair) and its parameters.
+-   `[mimo]`: Configure the number of antennas at the base station and user equipment.
 -   `[network]`: Network layout parameters like number of base stations, inter-site distance, and antenna heights.
 -   `[channel]`: Channel model parameters like shadowing standard deviation and noise figure.
 -   `[output]`: Output configuration, including the results file path.
+
+**Note on MIMO Implementation:** The current MIMO model is a simplification (uncorrelated Rayleigh fading) intended to provide a basic framework for MIMO simulations. The SINR calculation is also simplified. A more detailed, realistic MIMO model would require more complex channel models and receiver algorithms.
 
 ## How to Run
 

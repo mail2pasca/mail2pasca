@@ -30,6 +30,20 @@ class ConfigParser:
             'xr_packet_size_mean_bytes': self.config.getint('traffic', 'xr_packet_size_mean_bytes'),
         }
 
+    def get_scheduler_parameters(self):
+        """Returns a dictionary of scheduler parameters."""
+        return {
+            'type': self.config.get('scheduler', 'type'),
+            'pf_alpha': self.config.getfloat('scheduler', 'pf_alpha'),
+        }
+
+    def get_mimo_parameters(self):
+        """Returns a dictionary of MIMO parameters."""
+        return {
+            'num_bs_antennas': self.config.getint('mimo', 'num_bs_antennas'),
+            'num_ue_antennas': self.config.getint('mimo', 'num_ue_antennas'),
+        }
+
     def get_network_parameters(self):
         """Returns a dictionary of network parameters."""
         return {

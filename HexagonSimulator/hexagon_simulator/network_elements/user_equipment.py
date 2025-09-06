@@ -1,7 +1,7 @@
 import numpy as np
 
 class UserEquipment:
-    def __init__(self, ue_id, position, height, traffic_model):
+    def __init__(self, ue_id, position, height, traffic_model, num_antennas):
         """
         Initializes a UserEquipment object.
 
@@ -10,11 +10,13 @@ class UserEquipment:
             position (np.ndarray): 3D coordinates of the UE (x, y, z).
             height (float): Height of the UE antenna.
             traffic_model: An instance of a traffic model class.
+            num_antennas (int): The number of antennas at the UE.
         """
         self.ue_id = ue_id
         self.position = np.array(position)
         self.height = height
         self.traffic_model = traffic_model
+        self.num_antennas = num_antennas
 
         self.serving_bs = None
         self.sinr_dB = None

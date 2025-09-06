@@ -2,7 +2,7 @@ import numpy as np
 from collections import deque
 
 class BaseStation:
-    def __init__(self, bs_id, position, tx_power_dBm, height):
+    def __init__(self, bs_id, position, tx_power_dBm, height, num_antennas):
         """
         Initializes a BaseStation object.
 
@@ -11,11 +11,13 @@ class BaseStation:
             position (np.ndarray): 3D coordinates of the base station (x, y, z).
             tx_power_dBm (float): Transmission power in dBm.
             height (float): Height of the base station antenna.
+            num_antennas (int): The number of antennas at the base station.
         """
         self.bs_id = bs_id
         self.position = np.array(position)
         self.tx_power_dBm = tx_power_dBm
         self.height = height
+        self.num_antennas = num_antennas
 
         # A dictionary to hold the data queues for each attached UE
         # Key: ue_id, Value: deque of packet sizes
