@@ -20,8 +20,15 @@ class BaseStation:
         self.num_antennas = num_antennas
 
         # A dictionary to hold the data queues for each attached UE
-        # Key: ue_id, Value: deque of packet sizes
+        # Key: ue_id, Value: deque of packet objects
         self.ue_queues = {}
+
+        # A list to store received SRS signals in the current slot
+        self.received_srs = []
+
+        # A dictionary to store the estimated channel for each UE
+        # Key: ue_id, Value: estimated channel matrix H_est
+        self.estimated_channels = {}
 
     def __repr__(self):
         return f"BaseStation(id={self.bs_id}, position={self.position})"

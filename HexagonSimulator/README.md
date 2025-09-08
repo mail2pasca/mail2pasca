@@ -1,14 +1,16 @@
 # Hexagon Simulator
 
-This project is a Python-based system-level simulator for 5G networks. It is designed to simulate a hexagonal cellular network with various traffic models and calculate key performance indicators.
+This project is a Python-based system-level simulator for 5G networks. It is designed to simulate a hexagonal cellular network with a detailed physical layer and traffic models to calculate key performance indicators.
 
 ## Features
 
--   **Time-Stepped Simulation:** The simulation runs over a configurable duration with discrete time steps, allowing for dynamic traffic modeling.
--   **Advanced Channel Modeling:**
-    -   Implements channel models based on 3GPP TR 38.901 for UMa, UMi, and RMa scenarios.
-    -   Includes probabilistic Line-of-Sight (LOS) / Non-Line-of-Sight (NLOS) conditions.
-    -   **MIMO Support:** Simulates a simplified uncorrelated Rayleigh fading MIMO channel.
+-   **Time-Stepped, Slot-Based Simulation:** The simulation runs over a configurable duration with a TDD slot structure, allowing for dynamic and realistic modeling of uplink and downlink events.
+-   **Advanced Physical Layer (PHY) Modeling:**
+    -   **Channel Model:** Implements channel models based on 3GPP TR 38.901 for UMa, UMi, and RMa scenarios, including probabilistic Line-of-Sight (LOS) / Non-Line-of-Sight (NLOS) conditions.
+    -   **MIMO Support:** Simulates a simplified uncorrelated Rayleigh fading MIMO channel with configurable antenna numbers.
+    -   **SRS & Channel Estimation:** Models the transmission of Sounding Reference Signals (SRS) in the uplink and a simplified channel estimation process at the gNB with configurable estimation error.
+    -   **Precoding:** Implements Zero-Forcing (ZF) precoding at the gNB to mitigate inter-stream interference.
+    -   **Rate Control (Link Adaptation):** Uses a configurable MCS table to select the modulation and coding scheme based on the post-precoding SINR, providing a more realistic throughput calculation than the Shannon-Hartley limit.
 -   **Application Traffic Models:** Includes multiple configurable traffic models:
     -   **Full Buffer:** A continuous stream of data.
     -   **FTP Model 3:** Simulates bursty file transfers based on 3GPP specifications.
@@ -50,11 +52,13 @@ The configuration file is divided into the following sections:
 -   `[traffic]`: Select and configure the traffic model (FullBuffer, FTPModel3, or XRModel).
 -   `[scheduler]`: Select the scheduling algorithm (RoundRobin or ProportionalFair) and its parameters.
 -   `[mimo]`: Configure the number of antennas at the base station and user equipment.
+-   `[tdd]`: Configure the TDD slot structure (number of downlink, guard, and uplink symbols).
+-   `[uplink]`: Configure uplink parameters like SRS transmission power.
 -   `[network]`: Network layout parameters like number of base stations, inter-site distance, and antenna heights.
--   `[channel]`: Channel model parameters like shadowing standard deviation and noise figure.
+-   `[channel]`: Channel model parameters like shadowing, noise figure, and channel estimation error.
 -   `[output]`: Output configuration, including the results file path.
 
-**Note on MIMO Implementation:** The current MIMO model is a simplification (uncorrelated Rayleigh fading) intended to provide a basic framework for MIMO simulations. The SINR calculation is also simplified. A more detailed, realistic MIMO model would require more complex channel models and receiver algorithms.
+**Note on PHY Simplifications:** The current physical layer model includes several simplifications (e.g., uncorrelated Rayleigh fading, simplified channel estimation error model, basic ZF precoder) intended to provide a functional yet manageable framework for system-level simulations.
 
 ## How to Run
 

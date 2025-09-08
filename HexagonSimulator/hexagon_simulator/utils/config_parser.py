@@ -44,6 +44,23 @@ class ConfigParser:
             'num_ue_antennas': self.config.getint('mimo', 'num_ue_antennas'),
         }
 
+    def get_tdd_parameters(self):
+        """Returns a dictionary of TDD parameters."""
+        params = {
+            'num_dl_symbols': self.config.getint('tdd', 'num_dl_symbols'),
+            'num_guard_symbols': self.config.getint('tdd', 'num_guard_symbols'),
+            'num_ul_symbols': self.config.getint('tdd', 'num_ul_symbols'),
+        }
+        if sum(params.values()) != 14:
+            raise ValueError("The sum of DL, Guard, and UL symbols must be 14.")
+        return params
+
+    def get_uplink_parameters(self):
+        """Returns a dictionary of uplink parameters."""
+        return {
+            'srs_tx_power_dbm': self.config.getfloat('uplink', 'srs_tx_power_dbm'),
+        }
+
     def get_network_parameters(self):
         """Returns a dictionary of network parameters."""
         return {
@@ -59,6 +76,7 @@ class ConfigParser:
         return {
             'shadowing_std_dev_db': self.config.getfloat('channel', 'shadowing_std_dev_db'),
             'noise_figure_db': self.config.getfloat('channel', 'noise_figure_db'),
+            'channel_estimation_error_variance': self.config.getfloat('channel', 'channel_estimation_error_variance'),
         }
 
     def get_output_parameters(self):
