@@ -283,12 +283,14 @@
           <div class="speed-unit" id="speedUnit">km/h</div>
           <div class="speed-peak">Peak: <span id="peakVal">--</span></div>
         </div>
-        <button class="btn btn-danger" id="resetPeakBtn">Reset</button>
       </div>
 
       <!-- Top 10 speeds -->
       <div class="card">
-        <h3>Top 10 Speeds</h3>
+        <div class="row" style="align-items:center">
+          <h3 style="margin:0">Top 10 Speeds</h3>
+          <button class="btn btn-danger" id="resetPeakBtn" style="padding:5px 12px;font-size:0.8rem">Reset</button>
+        </div>
         <ul class="speeds-list" id="speedsList">
           <li class="speeds-empty" id="speedsEmpty" style="list-style:none">No throws yet</li>
         </ul>
