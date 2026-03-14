@@ -306,6 +306,7 @@ overlay.addEventListener('click', (e) => {
   pickColorBtn.textContent = 'Click on Ball in Video';
   pickColorBtn.classList.remove('active');
   overlay.style.cursor = 'default';
+  overlay.style.pointerEvents = 'none';
 });
 
 // ─── Controls ────────────────────────────────────────────────────────────────
@@ -361,10 +362,12 @@ pickColorBtn.addEventListener('click', () => {
     pickColorBtn.textContent = '→ Click on the ball in video';
     pickColorBtn.classList.add('active');
     overlay.style.cursor = 'crosshair';
+    overlay.style.pointerEvents = 'auto';
   } else {
     pickColorBtn.textContent = 'Click on Ball in Video';
     pickColorBtn.classList.remove('active');
     overlay.style.cursor = 'default';
+    overlay.style.pointerEvents = 'none';
   }
 });
 
