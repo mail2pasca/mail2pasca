@@ -201,6 +201,64 @@
 
     .tolerance-row { gap: 6px; }
 
+    /* Top speeds list */
+    .speeds-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .speeds-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #0f0f13;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.875rem;
+    }
+
+    .speeds-list li:first-child {
+      background: linear-gradient(90deg, #1a2a1a, #0f1a0f);
+      border: 1px solid #2e5c2e;
+    }
+    .speeds-list li:nth-child(2) { border: 1px solid #2a2a3a; }
+    .speeds-list li:nth-child(3) { border: 1px solid #2a2a3a; }
+    .speeds-list li { border: 1px solid #1e1e2e; }
+
+    .rank {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #555;
+      width: 18px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .speeds-list li:first-child .rank  { color: #ffd700; }
+    .speeds-list li:nth-child(2) .rank { color: #c0c0c0; }
+    .speeds-list li:nth-child(3) .rank { color: #cd7f32; }
+
+    .speed-entry {
+      flex: 1;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .speeds-list li:first-child .speed-entry { color: #66bb6a; }
+
+    .speed-entry-unit {
+      font-size: 0.72rem;
+      color: #666;
+    }
+
+    .speeds-empty {
+      font-size: 0.8rem;
+      color: #555;
+      text-align: center;
+      padding: 8px 0;
+    }
+
     @media (max-width: 750px) {
       .main-layout { flex-direction: column; }
       .panel { flex: 0 0 auto; width: 100%; }
@@ -225,7 +283,15 @@
           <div class="speed-unit" id="speedUnit">km/h</div>
           <div class="speed-peak">Peak: <span id="peakVal">--</span></div>
         </div>
-        <button class="btn btn-secondary" id="resetPeakBtn">Reset Peak</button>
+        <button class="btn btn-danger" id="resetPeakBtn">Reset</button>
+      </div>
+
+      <!-- Top 10 speeds -->
+      <div class="card">
+        <h3>Top 10 Speeds</h3>
+        <ul class="speeds-list" id="speedsList">
+          <li class="speeds-empty" id="speedsEmpty" style="list-style:none">No throws yet</li>
+        </ul>
       </div>
 
       <!-- Camera + Tracking controls -->

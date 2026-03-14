@@ -9,7 +9,9 @@ const speedVal    = document.getElementById('speedVal');
 const peakVal     = document.getElementById('peakVal');
 const speedUnit   = document.getElementById('speedUnit');
 const statusDot   = document.getElementById('statusDot');
-const resetPeakBtn= document.getElementById('resetPeakBtn');
+const resetPeakBtn  = document.getElementById('resetPeakBtn');
+const speedsList    = document.getElementById('speedsList');
+const speedsEmpty   = document.getElementById('speedsEmpty');
 const pickColorBtn= document.getElementById('pickColorBtn');
 const ballColorEl = document.getElementById('ballColor');
 const toleranceEl = document.getElementById('tolerance');
@@ -30,6 +32,10 @@ const TRAIL_LENGTH   = 30;      // trail dots
 let positions = [];             // [{x, y, t}]
 let trail     = [];             // [{x, y}]
 let peakSpeed = null;
+let topSpeeds = [];           // sorted desc, max 10 entries
+const TOP_SPEEDS_MAX = 10;
+// Minimum speed delta to record a new throw (avoids flooding list with near-identical readings)
+const MIN_RECORD_DELTA = 0.5;
 
 // Hidden processing canvas (full res)
 const procCanvas = document.createElement('canvas');
@@ -67,6 +73,56 @@ function pixelsPerSecToSpeed(pps) {
   if (unit === 'kmh') return { val: mPerSec * 3.6,    label: 'km/h' };
   if (unit === 'mph') return { val: mPerSec * 2.237,  label: 'mph'  };
   return                      { val: mPerSec,          label: 'm/s'  };
+}
+
+// ─── Top speeds ──────────────────────────────────────────────────────────────
+
+// Track the last "throw peak" — we record a speed when it starts dropping
+let lastSpeed     = 0;
+let throwPeak     = 0;
+let throwRecorded = false;
+
+function maybeRecordThrow(speed) {
+  if (speed > throwPeak) {
+    throwPeak     = speed;
+    throwRecorded = false;
+  } else if (!throwRecorded && throwPeak > MIN_RECORD_DELTA && speed < throwPeak * 0.75) {
+    // Speed dropped 25% from peak → treat as end of throw, record peak
+    addTopSpeed(throwPeak);
+    throwRecorded = true;
+    throwPeak     = 0;
+  }
+  lastSpeed = speed;
+}
+
+function addTopSpeed(speed) {
+  topSpeeds.push(speed);
+  topSpeeds.sort((a, b) => b - a);
+  if (topSpeeds.length > TOP_SPEEDS_MAX) topSpeeds.length = TOP_SPEEDS_MAX;
+  renderTopSpeeds();
+}
+
+function renderTopSpeeds() {
+  const unit = speedUnit.textContent;
+  // Remove all entries except the empty placeholder
+  while (speedsList.firstChild) speedsList.removeChild(speedsList.firstChild);
+
+  if (topSpeeds.length === 0) {
+    speedsList.appendChild(speedsEmpty);
+    speedsEmpty.style.display = '';
+    return;
+  }
+
+  const medals = ['🥇', '🥈', '🥉'];
+  topSpeeds.forEach((s, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span class="rank">${medals[i] ?? `#${i + 1}`}</span>
+      <span class="speed-entry">${s.toFixed(1)}</span>
+      <span class="speed-entry-unit">${unit}</span>
+    `;
+    speedsList.appendChild(li);
+  });
 }
 
 // ─── Ball detection ──────────────────────────────────────────────────────────
@@ -162,6 +218,8 @@ function processFrame() {
       peakSpeed = speed;
       peakVal.textContent = peakSpeed.toFixed(1);
     }
+
+    maybeRecordThrow(speed);
 
     statusDot.className = 'status-dot tracking';
 
@@ -284,6 +342,11 @@ stopBtn.addEventListener('click', () => {
 resetPeakBtn.addEventListener('click', () => {
   peakSpeed = null;
   peakVal.textContent = '--';
+  topSpeeds = [];
+  throwPeak = 0;
+  throwRecorded = false;
+  lastSpeed = 0;
+  renderTopSpeeds();
 });
 
 pickColorBtn.addEventListener('click', () => {
@@ -309,4 +372,8 @@ unitSelect.addEventListener('change', () => {
   peakVal.textContent = '--';
   speedVal.textContent = '--';
   positions = [];
+  topSpeeds = [];
+  throwPeak = 0;
+  throwRecorded = false;
+  renderTopSpeeds();
 });
