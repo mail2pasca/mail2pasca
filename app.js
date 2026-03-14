@@ -104,24 +104,25 @@ function addTopSpeed(speed) {
 
 function renderTopSpeeds() {
   const unit = speedUnit.textContent;
-  // Remove all entries except the empty placeholder
-  while (speedsList.firstChild) speedsList.removeChild(speedsList.firstChild);
+  speedsList.innerHTML = '';
 
   if (topSpeeds.length === 0) {
-    speedsList.appendChild(speedsEmpty);
-    speedsEmpty.style.display = '';
+    speedsList.innerHTML = '<p class="speeds-empty" id="speedsEmpty">No throws recorded yet — start the camera and throw!</p>';
     return;
   }
 
   const medals = ['🥇', '🥈', '🥉'];
+  const tierClass = ['gold', 'silver', 'bronze'];
+
   topSpeeds.forEach((s, i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span class="rank">${medals[i] ?? `#${i + 1}`}</span>
-      <span class="speed-entry">${s.toFixed(1)}</span>
-      <span class="speed-entry-unit">${unit}</span>
+    const div = document.createElement('div');
+    div.className = 'leaderboard-entry' + (i < 3 ? ` ${tierClass[i]}` : '');
+    div.innerHTML = `
+      <span class="lb-rank">${medals[i] ?? `#${i + 1}`}</span>
+      <span class="lb-speed">${s.toFixed(1)}</span>
+      <span class="lb-unit">${unit}</span>
     `;
-    speedsList.appendChild(li);
+    speedsList.appendChild(div);
   });
 }
 
@@ -259,9 +260,13 @@ function processFrame() {
     }
 
   } else {
-    // No ball detected — fade out speed after 0.5s without detections
+    // Ball lost — if a throw was in progress, record its peak now
+    if (throwPeak > MIN_RECORD_DELTA && !throwRecorded) {
+      addTopSpeed(throwPeak);
+      throwRecorded = true;
+      throwPeak = 0;
+    }
     statusDot.className = 'status-dot active';
-    // Keep last speed visible briefly (don't reset instantly)
   }
 
   animId = requestAnimationFrame(processFrame);

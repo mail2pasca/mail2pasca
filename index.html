@@ -201,62 +201,78 @@
 
     .tolerance-row { gap: 6px; }
 
-    /* Top speeds list */
-    .speeds-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    /* Leaderboard */
+    .leaderboard-section {
+      width: 100%;
+      max-width: 1100px;
+      background: #1a1a24;
+      border: 1px solid #2a2a3a;
+      border-radius: 12px;
+      padding: 20px;
     }
 
-    .speeds-list li {
+    .leaderboard-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 8px;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .leaderboard-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+    }
+
+    .leaderboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .leaderboard-entry {
       background: #0f0f13;
+      border: 1px solid #2a2a3a;
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .leaderboard-entry.gold   { border-color: #b8860b; background: linear-gradient(135deg, #1a1500, #0f0f13); }
+    .leaderboard-entry.silver { border-color: #666; background: linear-gradient(135deg, #141414, #0f0f13); }
+    .leaderboard-entry.bronze { border-color: #7c4a1e; background: linear-gradient(135deg, #160d00, #0f0f13); }
+
+    .lb-rank {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .lb-speed {
+      font-size: 1.6rem;
+      font-weight: 800;
       font-variant-numeric: tabular-nums;
-      font-size: 0.875rem;
-    }
-
-    .speeds-list li:first-child {
-      background: linear-gradient(90deg, #1a2a1a, #0f1a0f);
-      border: 1px solid #2e5c2e;
-    }
-    .speeds-list li:nth-child(2) { border: 1px solid #2a2a3a; }
-    .speeds-list li:nth-child(3) { border: 1px solid #2a2a3a; }
-    .speeds-list li { border: 1px solid #1e1e2e; }
-
-    .rank {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #555;
-      width: 18px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .speeds-list li:first-child .rank  { color: #ffd700; }
-    .speeds-list li:nth-child(2) .rank { color: #c0c0c0; }
-    .speeds-list li:nth-child(3) .rank { color: #cd7f32; }
-
-    .speed-entry {
-      flex: 1;
-      font-weight: 700;
       color: #e0e0e0;
+      line-height: 1.1;
     }
-    .speeds-list li:first-child .speed-entry { color: #66bb6a; }
+    .leaderboard-entry.gold   .lb-speed { color: #ffd700; }
+    .leaderboard-entry.silver .lb-speed { color: #c0c0c0; }
+    .leaderboard-entry.bronze .lb-speed { color: #cd7f32; }
 
-    .speed-entry-unit {
+    .lb-unit {
       font-size: 0.72rem;
       color: #666;
     }
 
     .speeds-empty {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #555;
       text-align: center;
-      padding: 8px 0;
+      padding: 16px 0;
+      grid-column: 1 / -1;
     }
 
     @media (max-width: 750px) {
@@ -283,17 +299,6 @@
           <div class="speed-unit" id="speedUnit">km/h</div>
           <div class="speed-peak">Peak: <span id="peakVal">--</span></div>
         </div>
-      </div>
-
-      <!-- Top 10 speeds -->
-      <div class="card">
-        <div class="row" style="align-items:center">
-          <h3 style="margin:0">Top 10 Speeds</h3>
-          <button class="btn btn-danger" id="resetPeakBtn" style="padding:5px 12px;font-size:0.8rem">Reset</button>
-        </div>
-        <ul class="speeds-list" id="speedsList">
-          <li class="speeds-empty" id="speedsEmpty" style="list-style:none">No throws yet</li>
-        </ul>
       </div>
 
       <!-- Camera + Tracking controls -->
@@ -334,7 +339,7 @@
         </div>
         <div class="row">
           <span class="label">Pixel width</span>
-          <input type="number" id="pixelWidth" value="100" min="1" id="pixelWidth" />
+          <input type="number" id="pixelWidth" value="100" min="1" />
         </div>
         <div class="row">
           <span class="label">Unit</span>
@@ -346,6 +351,17 @@
         </div>
         <p class="hint">Tip: throw ball across frame. Speed shown is horizontal + vertical combined.</p>
       </div>
+    </div>
+  </div>
+
+  <!-- Top 10 Leaderboard — full width below video -->
+  <div class="leaderboard-section">
+    <div class="leaderboard-header">
+      <h2>Top 10 Speeds</h2>
+      <button class="btn btn-danger" id="resetPeakBtn">Reset</button>
+    </div>
+    <div class="leaderboard-grid" id="speedsList">
+      <p class="speeds-empty" id="speedsEmpty">No throws recorded yet — start the camera and throw!</p>
     </div>
   </div>
 
